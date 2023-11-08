@@ -1,0 +1,23 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Compose
+      run: docker-compose up -d
+
+    - name: Run tests
+      run: docker-compose exec pythonapp python -m pytest
+
+    - name: Tear down services
+      run: docker-compose down
