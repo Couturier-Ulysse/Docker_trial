@@ -1,4 +1,4 @@
-name: Docker Compose CI
+name: CI/CD Pipeline
 
 on:
   push:
@@ -10,14 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout source code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Compose
-      run: docker-compose up -d
+      - name: Set up Docker Compose
+        run: docker-compose up -d
 
-    - name: Run tests
-      run: docker-compose exec pythonapp python -m pytest
-
-    - name: Tear down services
-      run: docker-compose down
+      - name: Build and run tests
+        run: |
+          docker-compose exec -T pythonapp python -m pytest
+        env:
+          DATABASE_HOST: localhost  # Mettez l'adresse de votre base de données si nécessaire
+          DATABASE_USER: root
+          DATABASE_PASSWORD: root
+          DATABASE_NAME: db
