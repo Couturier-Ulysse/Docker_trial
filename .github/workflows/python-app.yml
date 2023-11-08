@@ -16,11 +16,14 @@ jobs:
       - name: Set up Docker Compose
         run: docker-compose up -d
 
+      - name: Install pytest
+        run: docker-compose exec pythonapp pip install pytest
+
       - name: Build and run tests
         run: |
           docker-compose exec -T pythonapp python -m pytest
         env:
-          DATABASE_HOST: localhost  # Mettez l'adresse de votre base de données si nécessaire
+          DATABASE_HOST: localhost
           DATABASE_USER: root
           DATABASE_PASSWORD: root
           DATABASE_NAME: db
