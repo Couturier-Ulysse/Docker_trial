@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert and Display Students</title>
+</head>
+<body>
+    <h1>Insert and Display Students</h1>
+    <form action="/insert" method="post">
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" required><br>
+
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" required><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <ul id="student-list">
+        <!-- Existing students will be displayed here -->
+    </ul>
+    
+    <script>
+        // JavaScript for displaying students
+        fetch('/get_students')
+            .then(response => response.json())
+            .then(data => {
+                const studentList = document.getElementById('student-list');
+                data.forEach((student, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Student n°${index + 1}: ${student.FirstName} ${student.Surname}`;
+                    studentList.appendChild(listItem);
+                });
+            });
+    </script>
+</body>
+</html>
