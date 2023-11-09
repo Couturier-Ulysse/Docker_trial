@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI
 
 on:
   push:
@@ -9,21 +9,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: db
+        ports:
+          - 3306:3306
+
     steps:
-      - name: Checkout source code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Set up Docker Compose
         run: docker-compose up -d
 
-      - name: Install pytest
-        run: docker-compose exec pythonapp pip install pytest
+      - name: Install dependencies
+        run: docker-compose exec -T pythonapp pip install -r requirements.txt
 
-      - name: Build and run tests
-        run: |
-          docker-compose exec -T pythonapp python -m pytest
-        env:
-          DATABASE_HOST: localhost
-          DATABASE_USER: root
-          DATABASE_PASSWORD: root
-          DATABASE_NAME: db
+      - name: Run tests
+        run: docker-compose exec -T pythonapp python -m pytest
+
+    env:
+      DATABASE_HOST: localhost
+      DATABASE_USER: root
+      DATABASE_PASSWORD: root
+      DATABASE_NAME: db
