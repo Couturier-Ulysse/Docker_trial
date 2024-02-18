@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+  mysql:
+    build:
+      context: ./mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'db'
+    ports:
+      - "3306:3306"
+
   pythonapp:
     build:
       context: ./python
@@ -14,11 +23,3 @@ services:
       - DATABASE_PASSWORD=root
       - DATABASE_NAME=db
 
-  mysql:
-    build:
-      context: ./mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_DATABASE: 'db'
-    ports:
-      - "3306:3306"
